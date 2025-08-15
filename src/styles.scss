@@ -1,4 +1,25 @@
 @import "@angular/material/prebuilt-themes/indigo-pink.css";
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: rgb(1, 61, 1);
+    font-weight: 600 !important;
+
+    &:hover {
+        color: rgb(158, 231, 158);
+    }
+}
+
+.active-link {
+    color: rgb(188, 247, 203) !important;
+}

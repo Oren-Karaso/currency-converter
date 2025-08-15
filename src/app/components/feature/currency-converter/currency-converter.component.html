@@ -27,7 +27,7 @@
     </form>
 
     @if (calculatedRate()) {
-    <h2>{{form.value.amount}} {{form.value.fromCurrency}} = {{ calculatedRate() }} {{form.value.toCurrency}}</h2>
+    <h2>{{form.value.amount}} {{form.value.fromCurrency}} = {{ calculatedRate() | number:'1.2-6' }} {{form.value.toCurrency}}</h2>
     } @else if (isFetchingRate()) {
     <h2>Fetching rate...</h2>
     <mat-progress-spinner mode="indeterminate" [diameter]="50"></mat-progress-spinner>
