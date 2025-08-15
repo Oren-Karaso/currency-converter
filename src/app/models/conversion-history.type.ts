@@ -1,0 +1,1 @@
+export type ConversionHistory = Record<string,number>;

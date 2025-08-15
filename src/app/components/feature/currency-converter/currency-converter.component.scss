@@ -1,0 +1,17 @@
+.converter-wrapper {
+    padding: 20px;
+    display: flex;
+    gap: 25px;
+    flex-direction: column;
+    align-items: center;
+
+    .converter-form {
+        mat-form-field {
+            padding: 0 25px;
+
+        input {
+            height: 15px !important;
+        }
+    }
+    }
+}

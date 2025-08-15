@@ -1,0 +1,28 @@
+.navbar {
+    list-style-type: none;
+    margin: 0;
+    padding: 0 25px;
+    height: 50px;
+    width: 100%;
+    background: linear-gradient(to right, green, black);
+    border-bottom: 1px solid rgb(158, 231, 158);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+
+            &:hover {
+                color: rgb(158, 231, 158);
+            }
+        }
+    }
+}
