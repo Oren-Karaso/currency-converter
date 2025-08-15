@@ -9,9 +9,21 @@
         mat-form-field {
             padding: 0 25px;
 
-        input {
-            height: 15px !important;
+            input {
+                height: 15px !important;
+            }
         }
-    }
+
+        .submit-button {
+            color: rgb(0, 97, 24);
+            font-weight: 600;
+            font-size: large;
+            padding: 5px 0;
+            width: 100px;
+            height: 40px;
+            border-radius: 20px;
+            border: 1px solid #4caf50;
+            background: linear-gradient(to left, #4caf50, #81c784);
+        }
     }
 }

@@ -1,7 +1,7 @@
 <div class="converter-wrapper">
     <h1 class="title">Currency Converter</h1>
-    @if(form) {
-    <form [formGroup]="form" class="converter-form">
+    @if(form && fromcurrencies().length) {
+    <form [formGroup]="form" class="converter-form" (ngSubmit)="getRate()">
         <mat-form-field appearance="outline">
             <mat-label>Amount</mat-label>
             <input matInput formControlName="amount" type="number" />
@@ -22,6 +22,21 @@
                 }
             </mat-select>
         </mat-form-field>
+        <button mat-raised-button class="submit-button" type="submit" color="primary"
+            [disabled]="form.invalid || isFetchingRate()">Go!</button>
     </form>
+
+    @if (calculatedRate()) {
+    <h2>{{form.value.amount}} {{form.value.fromCurrency}} = {{ calculatedRate() }} {{form.value.toCurrency}}</h2>
+    } @else if (isFetchingRate()) {
+    <h2>Fetching rate...</h2>
+    <mat-progress-spinner mode="indeterminate" [diameter]="50"></mat-progress-spinner>
+    } @else {
+    <h2>No request has been made yet</h2>
+    }
+
+    } @else {
+    <h3>Loading currencies...</h3>
+    <mat-progress-spinner mode="indeterminate" [diameter]="50"></mat-progress-spinner>
     }
 </div>
