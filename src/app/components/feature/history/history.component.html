@@ -1,32 +1,28 @@
 <div class="history-wrapper">
     @if (rows.length > 0) {
     <h1 class="title">Conversion History</h1>
-    <p class="description">Here are the recorded conversion rates:</p>
+    <p class="description">Here are the recorded conversion rates from earlier today:</p>
     <table mat-table [dataSource]="rows" class="mat-elevation-z8">
 
-        <!-- From Column -->
         <ng-container matColumnDef="base">
             <th mat-header-cell *matHeaderCellDef> From </th>
             <td mat-cell *matCellDef="let row"> {{row.base}} </td>
         </ng-container>
 
-        <!-- To Column -->
         <ng-container matColumnDef="target">
             <th mat-header-cell *matHeaderCellDef> To </th>
             <td mat-cell *matCellDef="let row"> {{row.target}} </td>
         </ng-container>
 
-        <!-- Rate Column -->
         <ng-container matColumnDef="rate">
             <th mat-header-cell *matHeaderCellDef> Rate </th>
             <td mat-cell *matCellDef="let row"> {{row.rate | number:'1.2-6'}} </td>
         </ng-container>
 
-        <!-- Header and Row Definitions -->
         <tr mat-header-row *matHeaderRowDef="colHeaders"></tr>
         <tr mat-row *matRowDef="let row; columns: colHeaders;"></tr>
     </table>
     } @else {
-    <h2 class="placeholder-text">No conversion history has been recorded yet.</h2>
+    <h2 class="placeholder-text">No conversion history has been recorded yet</h2>
     }
 </div>

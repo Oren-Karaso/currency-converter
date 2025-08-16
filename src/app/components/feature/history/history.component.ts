@@ -21,11 +21,7 @@ export class HistoryComponent implements OnInit {
 
   ngOnInit(): void {
     this.history = this.currencyService.getCachedHistory();
-    console.log(this.history);
-
     this.createDataForTable();
-    console.log(this.rows);
-    
   }
 
   private createDataForTable() {

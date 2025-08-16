@@ -1,10 +1,10 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { RatesCache } from '../models/rates-cache.type';
 import { HttpClient } from '@angular/common/http';
-import { catchError, debounceTime, delay, map, Observable, of, take, tap } from 'rxjs';
+import { catchError, map, Observable, of, take, tap } from 'rxjs';
 import { RateResponse } from '../models/rate-response.interface';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
+const STORAGE_KEY = 'CURRENCIES_HISTORY';
 @Injectable({
   providedIn: 'root'
 })
@@ -38,7 +38,24 @@ export class CurrencyService {
   }
 
   getCachedHistory(): RatesCache {
-    return this.ratesCache;
+    return Object.keys(this.ratesCache).length ? this.ratesCache : this.getHistoryFromLocalStorage();
+  }
+
+  saveHistoryToLocalStorage(): void {
+    if (!Object.keys(this.getHistoryFromLocalStorage()).length) {
+      this.setLocalStorage();
+    } else {
+      this.updateLocalStorage()
+    }
+  }
+
+  private setLocalStorage() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(this.ratesCache));
+  }
+
+  private updateLocalStorage() {
+    const history = { ...this.getHistoryFromLocalStorage(), ...this.ratesCache };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
   }
 
   private addToCache(base: string, target: string, rate: number): void {
@@ -49,7 +66,6 @@ export class CurrencyService {
   private getAvailableCurrencies(): Observable<{ code: string, name: string }[]> {
     const getCurrenciesUrl = `${this.baseUrl}currencies`;
     return this.http.get<Record<string, string>>(getCurrenciesUrl).pipe(
-      delay(2000), // Just to let the loader work
       take(1),
       map(currencies => Object.entries(currencies).map(([code, name]) => ({ code, name }))),
     );
@@ -65,6 +81,11 @@ export class CurrencyService {
         this.currencies.set([]);
       }
     });
+  }
+
+  private getHistoryFromLocalStorage(): RatesCache {
+    const history = localStorage.getItem(STORAGE_KEY);
+    return history ? JSON.parse(history) : {};
   }
 }
 
