@@ -1,4 +1,59 @@
+@use 'sass:math';
 @import "@angular/material/prebuilt-themes/indigo-pink.css";
+
+$base-font-size: 16px;
+
+@function rem($pixels) {
+    @return math.div($pixels, $base-font-size) * 1rem;
+}
+
+$mobile: 840px;
+$tablet: 1300px;
+
+@media (max-width: $mobile) {
+    body {
+        font-size: rem(14px);
+        padding: 0 rem(8px);
+    }
+}
+
+@media (min-width: ($mobile + 1)) and (max-width: $tablet) {
+    body {
+        font-size: rem(16px);
+        padding: 0 rem(16px);
+    }
+}
+
+@media (min-width: ($tablet + 1px)) {
+    body {
+        font-size: rem(18px);
+        padding: 0 rem(32px);
+    }
+}
+
+@mixin respond($breakpoint) {
+    @if $breakpoint ==mobile {
+        @media (max-width: $mobile) {
+            @content;
+        }
+    }
+
+    @else if $breakpoint ==tablet {
+        @media (min-width: $mobile + 1px) and (max-width: $tablet) {
+            @content;
+        }
+    }
+
+    @else if $breakpoint ==desktop {
+        @media (min-width: $tablet + 1px) {
+            @content;
+        }
+    }
+
+    @else {
+        @warn "Breakpoint not supported: #{$breakpoint}";
+    }
+}
 
 html,
 body {
@@ -22,4 +77,23 @@ a {
 
 .active-link {
     color: rgb(188, 247, 203) !important;
+}
+
+button {
+    color: rgb(0, 97, 24);
+    font-weight: 600;
+    font-size: large;
+    padding: rem(5px) 0;
+    width: rem(100px);
+    height: rem(40px);
+    border-radius: rem(20px);
+    border: 1px solid #4caf50;
+    background: linear-gradient(to left, #4caf50, #81c784);
+    cursor: pointer;
+    box-shadow: 1px 1px 2px rgb(1, 61, 1);
+
+    &:disabled {
+        background: linear-gradient(to left, #c8e6c9, #a5d6a7);
+        color: #757575;
+    }
 }

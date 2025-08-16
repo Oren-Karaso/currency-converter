@@ -1,42 +1,39 @@
+@import '../../../../styles.scss';
+
 .converter-wrapper {
-    padding: 20px;
+    padding: rem(20px);
     display: flex;
-    gap: 25px;
     flex-direction: column;
     align-items: center;
+    gap: rem(25px);
 
     .converter-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
         mat-form-field {
-            padding: 0 25px;
+            padding: 0 rem(25px);
 
             input {
                 height: 15px !important;
             }
         }
 
-    }
+        @include respond(mobile) {
+            .fields-container {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
 
-    .submit-button,
-    .chart-button {
-        color: rgb(0, 97, 24);
-        font-weight: 600;
-        font-size: large;
-        padding: 5px 0;
-        width: 100px;
-        height: 40px;
-        border-radius: 20px;
-        border: 1px solid #4caf50;
-        background: linear-gradient(to left, #4caf50, #81c784);
-        cursor: pointer;
-
-        &:disabled {
-            background: linear-gradient(to left, #c8e6c9, #a5d6a7);
-            color: #757575;
         }
+
     }
 
     .chart-button {
-        padding: 5px 10px;
+        padding: rem(5px) rem(10px);
         width: fit-content;
     }
 }
