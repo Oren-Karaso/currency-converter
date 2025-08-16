@@ -3,7 +3,7 @@ import { RatesCache } from '../../models/rates-cache.type';
 import { HttpClient } from '@angular/common/http';
 import { RatesHistoryRes } from '../../models/rates-history-res.interface';
 import { tap } from 'rxjs/internal/operators/tap';
-import { Observable } from 'rxjs';
+import { catchError, Observable, of } from 'rxjs';
 
 const STORAGE_KEY = 'CURRENCIES_HISTORY';
 
@@ -11,6 +11,7 @@ const STORAGE_KEY = 'CURRENCIES_HISTORY';
   providedIn: 'root'
 })
 export class HistoryService {
+  private weekSpanRates: RatesHistoryRes | null = null;
   private ratesCache: RatesCache = {};
   private http = inject(HttpClient);
   private baseUrl = 'https://api.frankfurter.dev/v1/';
@@ -19,6 +20,10 @@ export class HistoryService {
 
   getCachedHistory(): RatesCache {
     return Object.keys(this.ratesCache).length ? this.ratesCache : this.getHistoryFromLocalStorage();
+  }
+
+  getWeekSpanRates(): RatesHistoryRes | null {
+    return this.weekSpanRates;
   }
 
   saveHistoryToLocalStorage(): void {
@@ -34,23 +39,21 @@ export class HistoryService {
     this.ratesCache[base][target] = rate;
   }
 
-  getRatesPerLastWeek(base: string, target: string): Observable<any> {
-    const getRatesHistoryUrl = `${this.baseUrl}${this.getTodayFormatted()}...?base=${base}&symbols=${target}`;
+  getRatesPerLastWeek(base: string, target: string): Observable<RatesHistoryRes | null> {
+    const getRatesHistoryUrl = `${this.baseUrl}${this.getAWeekAgoFormatted()}..?base=${base}&symbols=${target}`;
 
     return this.http.get<RatesHistoryRes>(getRatesHistoryUrl).pipe(
-      // map(res => res.rates[target]),
-      tap(rate => console.log(`Fetched rates for ${base} to ${target}:`, rate)
-      ),
-      // catchError(error => {
-      //   console.error(`Error fetching exchange rate from API: ${base} to ${target}`, error);
-      //   return of(0);
-      // })
+      tap(rates => this.weekSpanRates = rates),
+      catchError(error => {
+        console.error('Error fetching exchange rates for the past week:', error);
+        return of(null);
+      })
     );
   }
 
-  private getTodayFormatted(): string {
-    const today = new Date();
-    return today.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+  private getAWeekAgoFormatted(): string {
+    const aWeekAgo = new Date(new Date().setDate(new Date().getDate() - 7));
+    return aWeekAgo.toISOString().split('T')[0];
   }
 
   private setLocalStorage() {

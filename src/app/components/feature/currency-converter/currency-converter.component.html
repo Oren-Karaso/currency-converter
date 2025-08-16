@@ -1,6 +1,6 @@
 <div class="converter-wrapper">
     <h1 class="title">Currency Converter</h1>
-    @if(form && fromcurrencies().length) {
+    @if(form && fromCurrencies().length) {
     <form [formGroup]="form" class="converter-form" (ngSubmit)="getRate()">
 
         <mat-form-field appearance="outline">
@@ -16,7 +16,7 @@
         <mat-form-field appearance="outline">
             <mat-label>From</mat-label>
             <mat-select formControlName="fromCurrency">
-                @for(currency of fromcurrencies(); track currency){
+                @for(currency of fromCurrencies(); track currency){
                 <mat-option [value]="currency.code">{{ currency.name }}</mat-option>
                 }
             </mat-select>
@@ -60,4 +60,16 @@
     <h3>Loading currencies...</h3>
     <mat-progress-spinner mode="indeterminate" [diameter]="50"></mat-progress-spinner>
     }
+    <button mat-raised-button class="chart-button" (click)="showChart()" [disabled]="!calculatedRate">Show Me The Rates
+        from Past
+        Week</button>
+
+    <div class="chart-wrapper">
+        <h2 class="chart-title">Rates history for the past week</h2>
+        <div style="width: 700px;">
+            <canvas baseChart type="line" [data]="chartData()" [options]="lineChartOptions">
+            </canvas>
+        </div>
+    </div>
+
 </div>

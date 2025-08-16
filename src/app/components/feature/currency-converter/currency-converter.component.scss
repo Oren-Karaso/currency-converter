@@ -14,21 +14,29 @@
             }
         }
 
-        .submit-button {
-            color: rgb(0, 97, 24);
-            font-weight: 600;
-            font-size: large;
-            padding: 5px 0;
-            width: 100px;
-            height: 40px;
-            border-radius: 20px;
-            border: 1px solid #4caf50;
-            background: linear-gradient(to left, #4caf50, #81c784);
+    }
 
-            &:disabled {
-                background: linear-gradient(to left, #c8e6c9, #a5d6a7);
-                color: #757575;
-            }
+    .submit-button,
+    .chart-button {
+        color: rgb(0, 97, 24);
+        font-weight: 600;
+        font-size: large;
+        padding: 5px 0;
+        width: 100px;
+        height: 40px;
+        border-radius: 20px;
+        border: 1px solid #4caf50;
+        background: linear-gradient(to left, #4caf50, #81c784);
+        cursor: pointer;
+
+        &:disabled {
+            background: linear-gradient(to left, #c8e6c9, #a5d6a7);
+            color: #757575;
         }
+    }
+
+    .chart-button {
+        padding: 5px 10px;
+        width: fit-content;
     }
 }
