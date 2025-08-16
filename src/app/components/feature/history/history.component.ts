@@ -1,9 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { CurrencyService } from '../../../services/currency.service';
 import { RatesCache } from '../../../models/rates-cache.type';
 import { MatTableModule } from '@angular/material/table';
 import { CommonModule } from '@angular/common';
 import { DataRow } from '../../../models/data-row.interface';
+import { HistoryService } from '../../../services/history-service/history.service';
 
 @Component({
   selector: 'app-history',
@@ -12,7 +12,7 @@ import { DataRow } from '../../../models/data-row.interface';
   styleUrl: './history.component.scss'
 })
 export class HistoryComponent implements OnInit {
-  private currencyService = inject(CurrencyService);
+  private historyService = inject(HistoryService);
   history: RatesCache | null = null;
   rows: DataRow[] = [];
   colHeaders: string[] = ['base', 'target', 'rate'];
@@ -20,7 +20,7 @@ export class HistoryComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.history = this.currencyService.getCachedHistory();
+    this.history = this.historyService.getCachedHistory();
     this.createDataForTable();
   }
 

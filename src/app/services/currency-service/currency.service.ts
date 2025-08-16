@@ -1,16 +1,15 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { RatesCache } from '../models/rates-cache.type';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, Observable, of, take, tap } from 'rxjs';
-import { RateResponse } from '../models/rate-response.interface';
+import { RateResponse } from '../../models/rate-response.interface';
+import { HistoryService } from '../history-service/history.service';
 
-const STORAGE_KEY = 'CURRENCIES_HISTORY';
 @Injectable({
   providedIn: 'root'
 })
 export class CurrencyService {
-  private ratesCache: RatesCache = {};
   private http = inject(HttpClient);
+  private historyService = inject(HistoryService);
   private baseUrl = 'https://api.frankfurter.dev/v1/';
 
   public currencies = signal<{ code: string, name: string }[]>([]);
@@ -21,7 +20,7 @@ export class CurrencyService {
 
   getRateFromApi(base: string, target: string): Observable<number> {
     // Defining a const for checking if the rate is cached
-    const cachedRate = this.ratesCache[base]?.[target];
+    const cachedRate = this.historyService.getCachedHistory()[base]?.[target];
     if (cachedRate) {
       return of(cachedRate);
     }
@@ -29,38 +28,12 @@ export class CurrencyService {
 
     return this.http.get<RateResponse>(getRateUrl).pipe(
       map(res => res.rates[target]),
-      tap(rate => this.addToCache(base, target, rate)),
+      tap(rate => this.historyService.addToCache(base, target, rate)),
       catchError(error => {
         console.error(`Error fetching exchange rate from API: ${base} to ${target}`, error);
         return of(0);
       })
     );
-  }
-
-  getCachedHistory(): RatesCache {
-    return Object.keys(this.ratesCache).length ? this.ratesCache : this.getHistoryFromLocalStorage();
-  }
-
-  saveHistoryToLocalStorage(): void {
-    if (!Object.keys(this.getHistoryFromLocalStorage()).length) {
-      this.setLocalStorage();
-    } else {
-      this.updateLocalStorage()
-    }
-  }
-
-  private setLocalStorage() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(this.ratesCache));
-  }
-
-  private updateLocalStorage() {
-    const history = { ...this.getHistoryFromLocalStorage(), ...this.ratesCache };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
-  }
-
-  private addToCache(base: string, target: string, rate: number): void {
-    this.ratesCache[base] = this.ratesCache[base] || {};
-    this.ratesCache[base][target] = rate;
   }
 
   private getAvailableCurrencies(): Observable<{ code: string, name: string }[]> {
@@ -81,11 +54,6 @@ export class CurrencyService {
         this.currencies.set([]);
       }
     });
-  }
-
-  private getHistoryFromLocalStorage(): RatesCache {
-    const history = localStorage.getItem(STORAGE_KEY);
-    return history ? JSON.parse(history) : {};
   }
 }
 

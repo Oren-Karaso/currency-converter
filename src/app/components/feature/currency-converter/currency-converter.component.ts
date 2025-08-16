@@ -1,16 +1,27 @@
 import { Component, inject, linkedSignal, OnInit, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CurrencyService } from '../../../services/currency.service';
+import { CurrencyService } from '../../../services/currency-service/currency.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { take } from 'rxjs';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-currency-converter',
-  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatProgressSpinnerModule, CommonModule],
+  imports: [
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatProgressSpinnerModule,
+    CommonModule,
+    NgxChartsModule,
+    BrowserAnimationsModule
+  ],
   templateUrl: './currency-converter.component.html',
   styleUrl: './currency-converter.component.scss'
 })
