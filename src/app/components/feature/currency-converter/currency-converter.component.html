@@ -1,8 +1,8 @@
 <div class="converter-wrapper">
     <h1 class="title">Currency Converter</h1>
+
     @if(form && fromCurrencies().length) {
     <form [formGroup]="form" class="converter-form" (ngSubmit)="getRate()">
-
         <mat-form-field appearance="outline">
             <mat-label>Amount</mat-label>
             <input matInput formControlName="amount" type="number" />
@@ -44,8 +44,8 @@
             [disabled]="form.invalid || isFetchingRate()">Go!</button>
     </form>
 
-    @if (!isFetchingRate() && calculatedRate && !form.touched) {
-    <h2>{{form.value.amount}} {{form.value.fromCurrency}} = {{ calculatedRate | number:'1.2-6' }}
+    @if (!isFetchingRate() && calculatedRate() && !form.touched) {
+    <h2>{{form.value.amount}} {{form.value.fromCurrency}} = {{ calculatedRate() | number:'1.2-6' }}
         {{form.value.toCurrency}}</h2>
     } @else if (isFetchingRate()) {
     <h2>Fetching rate...</h2>
@@ -60,12 +60,13 @@
     <h3>Loading currencies...</h3>
     <mat-progress-spinner mode="indeterminate" [diameter]="50"></mat-progress-spinner>
     }
-    <button mat-raised-button class="chart-button" (click)="showChart()" [disabled]="!calculatedRate">Show Me The Rates
+
+    <button mat-raised-button class="chart-button" (click)="showChart()" [disabled]="!calculatedRate()">Show Me The
+        Rates
         from Past
         Week</button>
 
     <div class="chart-wrapper">
-        <h2 class="chart-title">Rates history for the past week</h2>
         <div style="width: 700px;">
             <canvas baseChart type="line" [data]="chartData()" [options]="lineChartOptions">
             </canvas>
