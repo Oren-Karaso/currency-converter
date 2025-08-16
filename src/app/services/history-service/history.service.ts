@@ -1,5 +1,9 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { RatesCache } from '../../models/rates-cache.type';
+import { HttpClient } from '@angular/common/http';
+import { RatesHistoryRes } from '../../models/rates-history-res.interface';
+import { tap } from 'rxjs/internal/operators/tap';
+import { Observable } from 'rxjs';
 
 const STORAGE_KEY = 'CURRENCIES_HISTORY';
 
@@ -8,6 +12,8 @@ const STORAGE_KEY = 'CURRENCIES_HISTORY';
 })
 export class HistoryService {
   private ratesCache: RatesCache = {};
+  private http = inject(HttpClient);
+  private baseUrl = 'https://api.frankfurter.dev/v1/';
 
   constructor() { }
 
@@ -26,6 +32,25 @@ export class HistoryService {
   addToCache(base: string, target: string, rate: number): void {
     this.ratesCache[base] = this.ratesCache[base] || {};
     this.ratesCache[base][target] = rate;
+  }
+
+  getRatesPerLastWeek(base: string, target: string): Observable<any> {
+    const getRatesHistoryUrl = `${this.baseUrl}${this.getTodayFormatted()}...?base=${base}&symbols=${target}`;
+
+    return this.http.get<RatesHistoryRes>(getRatesHistoryUrl).pipe(
+      // map(res => res.rates[target]),
+      tap(rate => console.log(`Fetched rates for ${base} to ${target}:`, rate)
+      ),
+      // catchError(error => {
+      //   console.error(`Error fetching exchange rate from API: ${base} to ${target}`, error);
+      //   return of(0);
+      // })
+    );
+  }
+
+  private getTodayFormatted(): string {
+    const today = new Date();
+    return today.toISOString().split('T')[0]; // Format as YYYY-MM-DD
   }
 
   private setLocalStorage() {

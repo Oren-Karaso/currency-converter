@@ -44,8 +44,8 @@
             [disabled]="form.invalid || isFetchingRate()">Go!</button>
     </form>
 
-    @if (!isFetchingRate() && calculatedRate()) {
-    <h2>{{form.value.amount}} {{form.value.fromCurrency}} = {{ calculatedRate() | number:'1.2-6' }}
+    @if (!isFetchingRate() && calculatedRate) {
+    <h2>{{form.value.amount}} {{form.value.fromCurrency}} = {{ calculatedRate | number:'1.2-6' }}
         {{form.value.toCurrency}}</h2>
     } @else if (isFetchingRate()) {
     <h2>Fetching rate...</h2>

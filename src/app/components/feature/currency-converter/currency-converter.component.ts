@@ -5,34 +5,25 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { take } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { HistoryService } from '../../../services/history-service/history.service';
 
 @Component({
   selector: 'app-currency-converter',
-  imports: [
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatProgressSpinnerModule,
-    CommonModule,
-    NgxChartsModule,
-    BrowserAnimationsModule
-  ],
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatProgressSpinnerModule, CommonModule],
   templateUrl: './currency-converter.component.html',
   styleUrl: './currency-converter.component.scss'
 })
 export class CurrencyConverterComponent implements OnInit {
   public form: FormGroup | null = null;
+  private historyService = inject(HistoryService);
   private currencyService = inject(CurrencyService);
   private fb = inject(FormBuilder);
   private currencies = this.currencyService.currencies;
   public fromcurrencies = linkedSignal(() => this.currencies());
   public toCurrencies = linkedSignal(() => this.currencies());
-  public calculatedRate = signal<number | null>(null);
+  public calculatedRate = 0;
   protected isFetchingRate = signal<boolean>(false);
 
   ngOnInit(): void {
@@ -74,8 +65,10 @@ export class CurrencyConverterComponent implements OnInit {
 
   private updateCalculatedRate(fromCurrency: any, toCurrency: any, amount: any) {
     this.currencyService.getRateFromApi(fromCurrency, toCurrency).pipe(take(1)).subscribe(rate => {
-      this.calculatedRate.set(rate * amount);
+      this.calculatedRate = rate * amount;
       this.dataFetched();
+    });
+    this.historyService.getRatesPerLastWeek(fromCurrency, toCurrency).pipe(take(1)).subscribe(history => {
     });
   }
 
