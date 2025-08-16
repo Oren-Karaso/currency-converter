@@ -36,4 +36,19 @@
         padding: rem(5px) rem(10px);
         width: fit-content;
     }
+
+    .chart-wrapper {
+        position: relative;
+        width: 100%;
+        max-width: 800px;
+        margin: auto;
+
+        @include respond(tablet) {
+            max-width: rem(600px);
+        }
+
+        @include respond(mobile) {
+            max-width: rem(400px);
+        }
+    }
 }
