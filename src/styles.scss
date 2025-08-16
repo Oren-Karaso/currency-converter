@@ -10,27 +10,6 @@ $base-font-size: 16px;
 $mobile: 840px;
 $tablet: 1300px;
 
-@media (max-width: $mobile) {
-    body {
-        font-size: rem(14px);
-        padding: 0 rem(8px);
-    }
-}
-
-@media (min-width: ($mobile + 1)) and (max-width: $tablet) {
-    body {
-        font-size: rem(16px);
-        padding: 0 rem(16px);
-    }
-}
-
-@media (min-width: ($tablet + 1px)) {
-    body {
-        font-size: rem(18px);
-        padding: 0 rem(32px);
-    }
-}
-
 @mixin respond($breakpoint) {
     @if $breakpoint ==mobile {
         @media (max-width: $mobile) {
@@ -58,6 +37,7 @@ $tablet: 1300px;
 html,
 body {
     height: 100%;
+    overflow-x: hidden;
 }
 
 body {
