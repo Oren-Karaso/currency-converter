@@ -44,12 +44,14 @@
             [disabled]="form.invalid || isFetchingRate()">Go!</button>
     </form>
 
-    @if (!isFetchingRate() && calculatedRate) {
+    @if (!isFetchingRate() && calculatedRate && !form.touched) {
     <h2>{{form.value.amount}} {{form.value.fromCurrency}} = {{ calculatedRate | number:'1.2-6' }}
         {{form.value.toCurrency}}</h2>
     } @else if (isFetchingRate()) {
     <h2>Fetching rate...</h2>
     <mat-progress-spinner mode="indeterminate" [diameter]="50"></mat-progress-spinner>
+    } @else if (form.touched) {
+    <h2>Asking for a new conversion...</h2>
     } @else {
     <h2>No request has been made yet</h2>
     }

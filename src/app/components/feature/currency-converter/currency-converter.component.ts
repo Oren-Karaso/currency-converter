@@ -17,14 +17,14 @@ import { HistoryService } from '../../../services/history-service/history.servic
 })
 export class CurrencyConverterComponent implements OnInit {
   public form: FormGroup | null = null;
+  public fromcurrencies = linkedSignal(() => this.currencies());
+  public toCurrencies = linkedSignal(() => this.currencies());
+  protected calculatedRate = 0;
+  protected isFetchingRate = signal<boolean>(false);
   private historyService = inject(HistoryService);
   private currencyService = inject(CurrencyService);
   private fb = inject(FormBuilder);
   private currencies = this.currencyService.currencies;
-  public fromcurrencies = linkedSignal(() => this.currencies());
-  public toCurrencies = linkedSignal(() => this.currencies());
-  public calculatedRate = 0;
-  protected isFetchingRate = signal<boolean>(false);
 
   ngOnInit(): void {
     this.initForm();
@@ -68,12 +68,13 @@ export class CurrencyConverterComponent implements OnInit {
       this.calculatedRate = rate * amount;
       this.dataFetched();
     });
-    this.historyService.getRatesPerLastWeek(fromCurrency, toCurrency).pipe(take(1)).subscribe(history => {
-    });
+    // this.historyService.getRatesPerLastWeek(fromCurrency, toCurrency).pipe(take(1)).subscribe(history => {
+    // });
   }
 
   private dataFetched() {
     this.isFetchingRate.set(false);
+    this.form?.markAsUntouched();
     this.form?.enable();
   }
 }
