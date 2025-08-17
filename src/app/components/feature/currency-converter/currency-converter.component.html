@@ -66,9 +66,9 @@
     <button mat-raised-button class="chart-button" (click)="showChart()" [disabled]="!calculatedRate()">Get Rates from
         Past Week</button>
 
-    <div class="chart-wrapper">
+    @if(isFreshChart()){<div class="chart-wrapper">
         <canvas baseChart type="line" [data]="chartData()" [options]="lineChartOptions">
         </canvas>
-    </div>
+    </div>}
 
 </div>

@@ -7,7 +7,7 @@ interface EmptyLineChart {
     datasets: []
 }
 
-const EMPTY_CHART: EmptyLineChart = {
+export const EMPTY_CHART: EmptyLineChart = {
     labels: [],
     datasets: []
 };

@@ -43,6 +43,7 @@ export class CurrencyConverterComponent {
         return this.historyService.getRatesPerLastWeek(fromCurrency, toCurrency)
       }),
       map(() => this.chartService.buildChartData()),
+      tap(() => this.isFreshChart.set(true))
     ));
 
   protected calculatedRate = toSignal(
@@ -50,6 +51,7 @@ export class CurrencyConverterComponent {
       tap(() => {
         this.form.disable();
         this.isFetchingRate.set(true);
+        this.isFreshChart.set(false);
       }),
       switchMap(() => {
         const { fromCurrency, toCurrency } = this.form.getRawValue();
@@ -66,6 +68,7 @@ export class CurrencyConverterComponent {
   );
 
   protected isFetchingRate = signal<boolean>(false);
+  protected isFreshChart = signal<boolean>(false);
   public lineChartOptions: ChartOptions<'line'> = { responsive: true };
   private historyService = inject(HistoryService);
   private currencyService = inject(CurrencyService);
